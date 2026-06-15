@@ -1,0 +1,225 @@
+openapi: 3.0.3
+info:
+  title: MetaVision API
+  description: |
+    REST API for MetaVision AI 3D model generation.
+
+    This OpenAPI document is manually maintained from MetaVision's public API
+    documentation and A2A agent card because MetaVision does not publish a
+    downloadable OpenAPI document.
+  version: "1.0.0"
+servers:
+  - url: https://metavision.click
+security:
+  - ApiKeyAuth: []
+tags:
+  - name: generation
+  - name: tasks
+  - name: keys
+paths:
+  /api/generate3d:
+    post:
+      operationId: createTextTo3DGeneration
+      summary: Generate a 3D model from text
+      description: Creates an asynchronous 3D generation task from a text prompt.
+      tags: [generation]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TextTo3DGenerationRequest"
+      responses:
+        "200":
+          description: Generation task created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenerationTaskResponse"
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/image2model:
+    post:
+      operationId: createImageTo3DGeneration
+      summary: Generate a 3D model from an image
+      description: Creates an asynchronous 3D generation task from an uploaded image.
+      tags: [generation]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: "#/components/schemas/ImageTo3DGenerationRequest"
+      responses:
+        "200":
+          description: Generation task created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenerationTaskResponse"
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/status/{task_id}:
+    get:
+      operationId: getGenerationStatus
+      summary: Check generation task status
+      description: Gets the status, progress, and output URLs for a generation task.
+      tags: [tasks]
+      security: []
+      parameters:
+        - name: task_id
+          in: path
+          required: true
+          description: Task identifier returned by a generation endpoint.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Generation task status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenerationStatusResponse"
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/key/validate:
+    post:
+      operationId: validateApiKey
+      summary: Validate an API key
+      description: Validates an API key and returns plan and credit usage details.
+      tags: [keys]
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ValidateApiKeyRequest"
+      responses:
+        "200":
+          description: API key validation result
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ValidateApiKeyResponse"
+        default:
+          description: Error response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+  schemas:
+    TextTo3DGenerationRequest:
+      type: object
+      required: [prompt]
+      properties:
+        prompt:
+          type: string
+          minLength: 1
+          description: Text description of the 3D model to generate.
+          example: a futuristic spaceship
+    ImageTo3DGenerationRequest:
+      type: object
+      required: [image]
+      properties:
+        image:
+          type: string
+          format: binary
+          description: Source image file to convert into a 3D model.
+    GenerationTaskResponse:
+      type: object
+      required: [task_id]
+      properties:
+        task_id:
+          type: string
+          description: Asynchronous generation task identifier.
+          example: abc123-...
+    GenerationStatus:
+      type: string
+      description: Generation task state.
+      enum:
+        - queued
+        - processing
+        - success
+        - failed
+    GenerationStatusResponse:
+      type: object
+      properties:
+        status:
+          $ref: "#/components/schemas/GenerationStatus"
+        progress:
+          type: number
+          format: double
+          minimum: 0
+          maximum: 100
+          description: Completion percentage.
+          example: 100
+        model:
+          type: string
+          format: uri
+          nullable: true
+          description: Generated 3D model URL when available.
+        image:
+          type: string
+          format: uri
+          nullable: true
+          description: Preview image URL when available.
+    ValidateApiKeyRequest:
+      type: object
+      required: [api_key]
+      properties:
+        api_key:
+          type: string
+          minLength: 1
+          description: MetaVision API key to validate.
+    ValidateApiKeyResponse:
+      type: object
+      properties:
+        valid:
+          type: boolean
+          description: Whether the submitted API key is valid.
+        plan:
+          type: string
+          nullable: true
+          description: API plan name.
+          example: basic
+        credits:
+          type: number
+          format: double
+          description: Total credits for the current plan.
+          example: 50
+        used:
+          type: number
+          format: double
+          description: Credits used.
+          example: 5
+        remaining:
+          type: number
+          format: double
+          description: Credits remaining.
+          example: 45
+    ErrorResponse:
+      type: object
+      additionalProperties: true
+      properties:
+        error:
+          type: string
+          description: Error message.

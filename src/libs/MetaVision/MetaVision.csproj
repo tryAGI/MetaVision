@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Nuget">
+    <Description>C# SDK for the MetaVision API -- text-to-3D and image-to-3D generation.</Description>
+    <PackageTags>api;client;sdk;dotnet;openapi;autosdk;ai;3d-generation;text-to-3d;image-to-3d;metavision</PackageTags>
+  </PropertyGroup>
+
+</Project>
