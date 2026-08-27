@@ -20,7 +20,7 @@ namespace MetaVision.JsonConverters
                     {
                         return global::MetaVision.GenerationStatusExtensions.ToEnum(stringValue);
                     }
-                    
+
                     break;
                 }
                 case global::System.Text.Json.JsonTokenType.Number:
