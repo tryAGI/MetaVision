@@ -4,7 +4,7 @@
 namespace MetaVision
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public sealed partial class GenerationTaskResponse
     {

@@ -43,23 +43,23 @@ namespace MetaVision
 
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         global::System.Text.Json.Serialization.JsonSerializerContext JsonSerializerContext { get; set; }
 
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public GenerationClient Generation { get; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public KeysClient Keys { get; }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public TasksClient Tasks { get; }
 

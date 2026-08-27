@@ -10,7 +10,7 @@ namespace MetaVision
     public sealed partial class GenerationClient : global::MetaVision.IGenerationClient, global::System.IDisposable
     {
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public const string DefaultBaseUrl = "https://metavision.click/";
 
@@ -37,7 +37,7 @@ namespace MetaVision
         internal global::System.Lazy<global::System.Text.Json.Serialization.JsonSerializerContext> JsonSerializerContextProvider { get; set; } = new(() => global::MetaVision.SourceGenerationContext.Default);
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public global::System.Text.Json.Serialization.JsonSerializerContext JsonSerializerContext
         {
